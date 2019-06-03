@@ -3,6 +3,8 @@ from .models import Todo
 from django.http import JsonResponse
 
 from django.views.decorators.csrf import csrf_exempt
+from .forms import TodoForm
+import json
 
 """
     목록을 불러오는 역할
@@ -17,5 +19,23 @@ def todo_fetch(request):
 
     return JsonResponse(todo_list, safe=False)
 
+"""
+    목록 전체 데이터를 받아 저장
+    저장할 때마다 전체 데이터를 지우고 다시 입력하는 방식
+"""
+@csrf_exempt
+def todo_save(request):
+    if request.body:
+        data = json.loads(request.body)
+        if 'todos' in data:
+            todos = data['todos']
+            Todo.objects.all().delete()
+            for todo in todos:
+                print('todo' ,todo)
+                form = TodoForm(todo)
+                if form.is_valid():
+                    form.save()
+
+    return JsonResponse({})
 
 
