@@ -15,7 +15,7 @@ def todo_fetch(request):
     todos = Todo.objects.all()
     todo_list = []
     for index, todo in enumerate(todos, start=1):
-        todo_list.append({'id': 'index', 'title': todo.title, 'completed': todo.completed})
+        todo_list.append({'id': index, 'title': todo.title, 'completed': todo.completed})
 
     return JsonResponse(todo_list, safe=False)
 
